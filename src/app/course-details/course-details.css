@@ -128,6 +128,11 @@ p {
   border-top: 1px solid #f0f0f0;
 }
 
+.subtopics a{
+  text-decoration: none;
+  gap: 8px;
+}
+
 .subtopics ul {
   list-style: none;
   padding: 0;
@@ -144,7 +149,7 @@ p {
 }
 
 .subtopics li::before {
-  content: "📘";
+  /* content: "📘"; */
   font-size: 1rem;
 }
 

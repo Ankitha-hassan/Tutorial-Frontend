@@ -4,12 +4,14 @@ import { Layout } from './layout/layout';
 import { Courses } from './courses/courses';
 import { CourseDetails } from './course-details/course-details';
 import { SubtopicContent } from './sub-topic-content/subtopic-content';
+import { About } from './about/about';
 
 export const routes: Routes = [
     { path : '', component: Layout ,
         children: [
             {path: 'home', component: Home},
             {path: 'Courses', component: Courses},
+            { path: 'about', component: About},
             {path: 'course-details', component: CourseDetails},
             { path: 'course-details/:id', component: CourseDetails },
             { path: 'subtopics/:subtopicId', component: SubtopicContent },

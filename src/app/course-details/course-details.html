@@ -30,7 +30,7 @@
       <ul>
         <li *ngFor="let sub of topic.subtopics">
       <a [routerLink]="['/subtopics', sub.subTopicId]" (click)="selectSubtopic(sub.subTopicId)" >
-        {{ sub.subTopicName }}
+        <i class="pi pi-book"></i>     {{ sub.subTopicName }}
       </a> </li>
       </ul>
     </div>
