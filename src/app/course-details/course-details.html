@@ -1,0 +1,30 @@
+<div *ngIf="loading">Loading course...</div>
+
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="!loading && selectedCourse">
+  <div class="breadcrumb">
+    <a routerLink="/home" routerLinkActive="active">Home</a> › 
+    <a routerLink="/Courses" routerLinkActive="active">Courses</a> › 
+    <span>{{ selectedCourse.courseName }}</span>
+  </div>
+
+  <h1>{{ selectedCourse.courseName }}</h1>
+  <p>{{ selectedCourse.description }}</p>
+
+  <!-- Show topics -->
+<div class="topics" *ngIf="selectedTopics?.length">
+  <div *ngFor="let topic of selectedTopics">
+    <h2>{{ topic.topicName }}</h2>
+    <ul>
+      <li *ngFor="let subtopic of selectedSubTopics">{{ subtopic }}</li>
+    </ul>
+  </div>
+</div>
+
+  <!-- Back to Courses button -->
+  <div class="back-button">
+    <a routerLink="/Courses" class="btn btn-secondary">← Back to Courses</a>
+  </div>
+
+

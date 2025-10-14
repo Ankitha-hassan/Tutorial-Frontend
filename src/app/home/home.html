@@ -1,0 +1,149 @@
+<!-- Hero Section -->
+  <section class="hero">
+    <div class="badge">🔹 Free tutorials for everyone</div>
+    <h1>Learn to Code, Build Your Future</h1>
+    <p>
+      Master web development, programming, and more with our comprehensive, free tutorials.
+      Start your coding journey today with expert-crafted content.
+    </p>
+    <div class="buttons">
+      <a routerLink= "/Courses" routerLinkActive="active" class="btn primary">Start Learning →</a>
+      <a href="#" class="btn secondary">Learn More</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="feature">
+      <div class="icon-box purple">💻</div>
+      <h3>Learn by Doing</h3>
+      <p>Hands-on examples and exercises to reinforce your learning.</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-box violet">⚡</div>
+      <h3>Fast & Easy</h3>
+      <p>Clear explanations and well-structured content for quick learning.</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-box pink">👥</div>
+      <h3>Community Support</h3>
+      <p>Join thousands of learners on their coding journey.</p>
+    </div>
+
+    <div class="feature">
+      <div class="icon-box yellow">🏅</div>
+      <h3>100% Free</h3>
+      <p>All tutorials and resources are completely free to use.</p>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+
+  <section class="courses" id="courses">
+  <div class="section-header">
+    <h2>Featured Courses</h2>
+    <p>Start with our most popular courses designed for beginners and intermediate learners</p>
+  </div>
+
+  <div class="courses-grid">
+    <div *ngFor="let course of courses" class="course-card">
+      <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=400&h=200&fit=crop" [alt]="course.courseName" class="course-image">
+      <div class="course-content">
+        <div class="course-header">
+          <h3 class="course-title">{{ course.courseName }}</h3>
+          <!-- <span class="course-level" [ngClass]="{
+              'level-beginner': course.level.toLowerCase() === 'beginner',
+              'level-intermediate': course.level.toLowerCase() === 'intermediate'
+          }">
+            {{ course.level }}
+          </span> -->
+        </div>
+        <p class="course-description">{{ course.description }}</p>
+        <!-- <p class="course-category">{{ course.category }}</p> -->
+        <!-- <button class="course-btn">Explore Course →</button> -->
+        <div>
+        <div class="courses-btn">
+    <a [routerLink]="['/course-details', course.courseId]" routerLinkActive="active" class="course-btn">Explore Course →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view-all">
+    <a routerLink="/Courses" routerLinkActive="active" class="btn btn-secondary">View All Courses</a>
+  </div>
+</section>
+
+    <!-- <section class="courses" id="courses">
+        <div class="section-header">
+            <h2>Featured Courses</h2>
+            <p>Start with our most popular courses designed for beginners and intermediate learners</p>
+        </div>
+        <div class="courses-grid">
+            <div class="course-card">
+                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=400&h=200&fit=crop" alt="HTML Tutorial" class="course-image">
+                <div class="course-content">
+                    <div class="course-header">
+                        <h3 class="course-title">HTML Tutorial</h3>
+                        <span class="course-level level-beginner">Beginner</span>
+                    </div>
+                    <p class="course-description">Learn the fundamentals of HTML and build structured web pages from scratch.</p>
+                    <p class="course-category">Web Development</p>
+                    <button class="course-btn">Explore Course →</button>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <img src="https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?w=400&h=200&fit=crop" alt="CSS Tutorial" class="course-image">
+                <div class="course-content">
+                    <div class="course-header">
+                        <h3 class="course-title">CSS Tutorial</h3>
+                        <span class="course-level level-beginner">Beginner</span>
+                    </div>
+                    <p class="course-description">Master styling techniques and create beautiful responsive designs.</p>
+                    <p class="course-category">Web Development</p>
+                    <button class="course-btn">Explore Course →</button>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <img src="https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=200&fit=crop" alt="JavaScript Tutorial" class="course-image">
+                <div class="course-content">
+                    <div class="course-header">
+                        <h3 class="course-title">JavaScript Tutorial</h3>
+                        <span class="course-level level-intermediate">Intermediate</span>
+                    </div>
+                    <p class="course-description">Learn programming fundamentals and add interactivity to your websites.</p>
+                    <p class="course-category">Programming</p>
+                    <button class="course-btn">Explore Course →</button>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop" alt="React Tutorial" class="course-image">
+                <div class="course-content">
+                    <div class="course-header">
+                        <h3 class="course-title">React Tutorial</h3>
+                        <span class="course-level level-intermediate">Intermediate</span>
+                    </div>
+                    <p class="course-description">Build modern, interactive user interfaces with React library.</p>
+                    <p class="course-category">Frameworks</p>
+                    <button class="course-btn">Explore Course →</button>
+                </div>
+            </div>
+        </div>
+        <div class="view-all">
+            <a routerLink= "Courses" routerLinkActive="active" class="btn btn-secondary">View All Courses</a>
+        </div>
+    </section> -->
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Start Your Coding Journey?</h2>
+        <p>Join thousands of learners who are building their skills with our free tutorials</p>
+        <a routerLink= "/Courses" routerLinkActive="active" class="btn btn-white">Browse All Courses</a>
+    </section>
+
