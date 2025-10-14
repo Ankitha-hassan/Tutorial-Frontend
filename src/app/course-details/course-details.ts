@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   imports: [CommonModule, RouterModule],
   selector: 'app-course-details',
-  templateUrl: './course-details.html'
+  templateUrl: './course-details.html',
+  styleUrl: './course-details.css'
 })
 export class CourseDetails implements OnInit {
   selectedCourse: Course | undefined;
@@ -46,17 +47,38 @@ export class CourseDetails implements OnInit {
     }
   });
 
-  // Fetch topics for the course
-  this.courseService.getTopicsByCourseId(this.courseId).subscribe({
-    next: (topics) => {
-      this.selectedTopics = topics;
-      console.log('Topics:', topics);
-    },
-    error: (err) => {
-      console.error(err);
-      this.error = 'Failed to load topics';
-    }
-  });
+  // Fetch topics and then subtopics for each
+    this.courseService.getTopicsByCourseId(this.courseId).subscribe({
+      next: (topics) => {
+        this.selectedTopics = topics;
+        console.log('Selected Topics:', topics);
+
+        // for each topic, fetch its subtopics
+        this.selectedTopics.forEach((topic) => {
+          this.courseService.getSubtopicsByTopicId(topic.topicId).subscribe({
+            next: (subtopics) => {
+              topic.subtopics = subtopics; // ✅ store directly inside topic
+              console.log(`Subtopics for Topic ${topic.topicId}:`, subtopics);
+            },
+            error: (err) => {
+              console.error(err);
+            }
+          });
+        });
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Failed to load topics';
+        this.loading = false;
+      }
+    });
+  }
+  
+  toggleTopic(index: number): void {
+  this.selectedTopics[index].open = !this.selectedTopics[index].open;
 }
 
+  
 }

@@ -1,3 +1,4 @@
+<div class="coursedetails-container">
 <div *ngIf="loading">Loading course...</div>
 
 <div *ngIf="error">{{ error }}</div>
@@ -11,20 +12,34 @@
 
   <h1>{{ selectedCourse.courseName }}</h1>
   <p>{{ selectedCourse.description }}</p>
-
+  <h3>Course topics</h3>
   <!-- Show topics -->
 <div class="topics" *ngIf="selectedTopics?.length">
-  <div *ngFor="let topic of selectedTopics">
-    <h2>{{ topic.topicName }}</h2>
-    <ul>
-      <li *ngFor="let subtopic of selectedSubTopics">{{ subtopic }}</li>
-    </ul>
+  <div *ngFor="let topic of selectedTopics; let i = index" class="topic-card">
+    <div class="topic-header" (click)="toggleTopic(i)">
+      <div class="topic-number">{{ i + 1 }}</div>
+      <div class="topic-info">
+        <h2>{{ topic.topicName }}</h2>
+        <p>{{ topic.subtopics?.length || 0 }} lessons</p>
+      </div>
+      <div class="topic-arrow" [class.open]="topic.open">›</div>
+    </div>
+
+    <!-- Collapsible content -->
+    <div class="subtopics" *ngIf="topic.open">
+      <ul>
+        <li *ngFor="let sub of topic.subtopics">
+          {{ sub.subTopicName }}
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
+
 
   <!-- Back to Courses button -->
   <div class="back-button">
     <a routerLink="/Courses" class="btn btn-secondary">← Back to Courses</a>
   </div>
-
+</div>
 

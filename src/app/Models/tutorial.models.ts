@@ -6,6 +6,7 @@ export interface Course {
   topics?: Topic[];
 }
 export interface Topic {
+  open: any;
   topicId: number;
   courseId: number;
   topicName: string;
@@ -14,7 +15,7 @@ export interface Topic {
 export interface Subtopic {
   subtopicId: number;
   topicId: number;
-  subtopicName: string;
+  subTopicName: string;
 }
 export interface Content {
   id: number;
