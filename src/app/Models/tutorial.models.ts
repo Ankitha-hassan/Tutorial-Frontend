@@ -13,13 +13,13 @@ export interface Topic {
   subtopics?: Subtopic[];
 }
 export interface Subtopic {
-  subtopicId: number;
+  subTopicId: number;
   topicId: number;
   subTopicName: string;
 }
 export interface Content {
   id: number;
-  subtopicId: number;
+  subTopicId: number;
   title: string;
   body: string; // markdown/html
   contentType: 'markdown'|'html'|'video'|'embed';

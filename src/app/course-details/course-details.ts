@@ -4,6 +4,7 @@ import { Course, Subtopic, Topic } from '../Models/tutorial.models';
 import { CourseService } from '../courses/course-service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
 @Component({
   imports: [CommonModule, RouterModule],
   selector: 'app-course-details',
@@ -59,6 +60,8 @@ export class CourseDetails implements OnInit {
             next: (subtopics) => {
               topic.subtopics = subtopics; // ✅ store directly inside topic
               console.log(`Subtopics for Topic ${topic.topicId}:`, subtopics);
+
+              
             },
             error: (err) => {
               console.error(err);
@@ -76,6 +79,11 @@ export class CourseDetails implements OnInit {
     });
   }
   
+  selectedSubtopicId: number | null = null;
+selectSubtopic(id: number): void {
+  this.selectedSubtopicId = id;
+  console.log('Selected Subtopic ID:', this.selectedSubtopicId);
+}
   toggleTopic(index: number): void {
   this.selectedTopics[index].open = !this.selectedTopics[index].open;
 }

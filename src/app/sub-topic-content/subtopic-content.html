@@ -1,0 +1,21 @@
+<div *ngIf="loading">Loading subtopic content...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="!loading && subtopicContent.length > 0" class="subtopic-container">
+  <div class="breadcrumb">
+    <a routerLink="/Courses" routerLinkActive="active">Courses</a> ›
+    <span>{{ subtopicContent[0].title }}</span>
+  </div>
+
+  <h1>{{ subtopicContent[0].title }}</h1>
+
+  <div *ngFor="let content of subtopicContent" class="content-section">
+    <div [innerHTML]="content.body"></div>
+  </div>
+
+  <a routerLink="/Courses" routerLinkActive="active"  class="btn btn-secondary">← Back to Courses</a>
+</div>
+
+<div *ngIf="!loading && subtopicContent.length === 0">
+  No content found for this subtopic.
+</div>

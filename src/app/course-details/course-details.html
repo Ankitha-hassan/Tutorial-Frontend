@@ -29,8 +29,9 @@
     <div class="subtopics" *ngIf="topic.open">
       <ul>
         <li *ngFor="let sub of topic.subtopics">
-          {{ sub.subTopicName }}
-        </li>
+      <a [routerLink]="['/subtopics', sub.subTopicId]" (click)="selectSubtopic(sub.subTopicId)" >
+        {{ sub.subTopicName }}
+      </a> </li>
       </ul>
     </div>
   </div>
