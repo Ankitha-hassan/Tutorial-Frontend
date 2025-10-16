@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../courses/course-service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Content } from '../Models/tutorial.models';
+import { Content, Course, Topic } from '../Models/tutorial.models';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,17 +11,26 @@ import { RouterModule } from '@angular/router';
   templateUrl: './subtopic-content.html',
   styleUrl: './subtopic-content.css'
 })
-export class SubtopicContent {
+export class SubtopicContent implements OnInit {
   subtopicContent: Content[] = [];
-  loading: boolean = true;
-  error: string = '';
+  topics: Topic[] = [];
+  courses: any;
+  loading = true;
+  error = '';
+  hasSidebar = true;
 
-   constructor(
+  constructor(
     private route: ActivatedRoute,
     private courseService: CourseService
-  ) { }
+  ) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    // 🔹 Subscribe to shared topics from service
+    this.courseService.topics$.subscribe((topics) => {
+      this.topics = topics;
+    });
+
+    // 🔹 Fetch subtopic content
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('subtopicId');
       const id = Number(idParam);
@@ -30,7 +39,6 @@ export class SubtopicContent {
         this.courseService.getContentBySubtopicId(id).subscribe({
           next: (data) => {
             this.subtopicContent = data;
-            console.log('Subtopic Content:', data);
             this.loading = false;
           },
           error: (err) => {
@@ -44,6 +52,13 @@ export class SubtopicContent {
         this.loading = false;
       }
     });
+  }
+
+  toggleTopic(index: number): void {
+    this.topics[index].open = !this.topics[index].open;
+  }
+
+  selectSubtopic(id: number): void {
+    console.log('Selected Subtopic ID:', id);
+  }
 }
-    }
-  

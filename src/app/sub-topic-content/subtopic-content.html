@@ -1,21 +1,63 @@
-<div *ngIf="loading">Loading subtopic content...</div>
-<div *ngIf="error">{{ error }}</div>
+<!-- HTML Template -->
+<div *ngIf="loading" class="loading-state">Loading subtopic content...</div>
 
-<div *ngIf="!loading && subtopicContent.length > 0" class="subtopic-container">
-  <div class="breadcrumb">
-    <a routerLink="/Courses" routerLinkActive="active">Courses</a> ›
-    <span>{{ subtopicContent[0].title }}</span>
+<div *ngIf="error" class="error-state">{{ error }}</div>
+
+<div *ngIf="!loading && subtopicContent.length > 0" class="course-layout">
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a routerLink="/Courses" routerLinkActive="active">Courses</a>
+      <span class="separator">›</span>
+      <span>{{ subtopicContent[0].title }}</span>
+    </div>
+
+    <!-- Page Title -->
+    <!-- <h1 class="page-title">{{ subtopicContent[0].title }}</h1> -->
+
+    <!-- Content Sections -->
+    <div *ngFor="let content of subtopicContent" class="content-section">
+      <h2 *ngIf="content.title" class="section-title"></h2>
+      <div [innerHTML]="content.body" class="section-body"></div>
+    </div>
+
+    <!-- Back Button -->
+    <a routerLink="/Courses" routerLinkActive="active" class="back-button">
+      ← Back to Courses
+    </a>
   </div>
 
-  <h1>{{ subtopicContent[0].title }}</h1>
+  <!-- Sidebar (Optional - for topics like HTML tutorial) -->
+  <aside class="sidebar" *ngIf="hasSidebar">
+  <div class="sidebar-header">Course Topics</div>
 
-  <div *ngFor="let content of subtopicContent" class="content-section">
-    <div [innerHTML]="content.body"></div>
-  </div>
+  <nav class="sidebar-nav">
+    <div class="topics" *ngIf="topics?.length">
+      <div *ngFor="let topic of topics" class="topic-block">
+        <h4 class="topic-title">{{ topic.topicName }}</h4>
+        <ul class="subtopic-list">
+          <li *ngFor="let sub of topic.subtopics">
+            <a
+              [routerLink]="['/subtopics', sub.subTopicId]"
+              routerLinkActive="active-link"
+              class="subtopic-link"
+            >
+              {{ sub.subTopicName }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <a routerLink="/Courses" routerLinkActive="active"  class="btn btn-secondary">← Back to Courses</a>
+  <button class="mark-complete">
+    <span class="icon">✓</span>
+    Mark as Complete
+  </button>
+</aside>
 </div>
 
-<div *ngIf="!loading && subtopicContent.length === 0">
+<div *ngIf="!loading && subtopicContent.length === 0" class="no-content">
   No content found for this subtopic.
 </div>

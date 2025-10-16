@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject,Observable } from 'rxjs';
 import { Content, Course, Subtopic, Topic } from '../Models/tutorial.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-   private apiUrl = 'http://localhost:8080/api/Course'; 
-   private apiUrl1 = 'http://localhost:8080/api/Topics';
-   private apiUrl2 = 'http://localhost:8080/api/Subtopics';
-   private apiUrl3 = 'http://localhost:8080/api/Content';
+   private apiUrl = 'http://localhost:8080/api/v1/Course'; 
+   private apiUrl1 = 'http://localhost:8080/api/v1/Topics';
+   private apiUrl2 = 'http://localhost:8080/api/v1/Subtopics';
+   private apiUrl3 = 'http://localhost:8080/api/v1/Content';
 
   constructor(private http: HttpClient) { }
+
+   private topicsSource = new BehaviorSubject<Topic[]>([]);
+  topics$ = this.topicsSource.asObservable();
+
+  setTopics(topics: Topic[]) {
+    this.topicsSource.next(topics);
+  }
 
   getCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(this.apiUrl);

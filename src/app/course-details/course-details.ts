@@ -68,6 +68,7 @@ export class CourseDetails implements OnInit {
             }
           });
         });
+        this.courseService.setTopics(this.selectedTopics);
 
         this.loading = false;
       },
