@@ -16,11 +16,12 @@ export interface Subtopic {
   subTopicId: number;
   topicId: number;
   subTopicName: string;
+  content: string;
 }
-export interface Content {
-  id: number;
-  subTopicId: number;
-  title: string;
-  body: string; // markdown/html
-  contentType: 'markdown'|'html'|'video'|'embed';
-}
+// export interface Content {
+//   id: number;
+//   subTopicId: number;
+//   title: string;
+//   body: string; // markdown/html
+//   contentType: 'markdown'|'html'|'video'|'embed';
+// }

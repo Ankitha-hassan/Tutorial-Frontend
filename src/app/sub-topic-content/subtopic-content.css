@@ -133,7 +133,9 @@
   /* position: fixed; */
   top: 150px;
   left: 100px;
-  height: 390px; 
+  height: 450px; 
+  border: 1px solid #e5e7eb; /* ✅ border all around */
+  border-radius: 12px;
   width: 260px;
   background: #fff;
   border-right: 1px solid #e5e7eb;
@@ -205,29 +207,47 @@
   font-weight: 500;
 }
 
+.completion-container {
+  width: 280px;
+  /* position: fixed; */
+  text-align: center;
+  margin-top: 80px;
+  margin-bottom: 50px;
+  margin-left: 120px;
+}
+
 .mark-complete {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  color: #111827;
+  background-color: #6366f1; /* Indigo */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background 0.2s;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+  transition: all 0.3s ease;
 }
 
 .mark-complete:hover {
-  background: #f3f4f6;
+  background-color: #4f46e5;
+}
+
+.mark-complete.completed {
+  background-color: #ede9fe;
+  color: #4f46e5;
+  border: 1px solid #c7d2fe;
+  font-weight: 600;
+  cursor: default;
+}
+
+.mark-complete.completed .icon {
+  color: #4f46e5;
 }
 
 .icon {
-  color: #16a34a;
+  margin-right: 8px;
 }
-
 
 /* Loading and Error States */
 .loading-state,

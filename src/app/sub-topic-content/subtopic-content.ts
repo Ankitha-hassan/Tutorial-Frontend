@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../courses/course-service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Content, Course, Topic } from '../Models/tutorial.models';
+import { Course, Subtopic, Topic } from '../Models/tutorial.models';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './subtopic-content.css'
 })
 export class SubtopicContent implements OnInit {
-  subtopicContent: Content[] = [];
+  subtopicContent?: Subtopic;
   topics: Topic[] = [];
   courses: any;
   loading = true;
@@ -38,6 +38,7 @@ export class SubtopicContent implements OnInit {
       if (id && !isNaN(id)) {
         this.courseService.getContentBySubtopicId(id).subscribe({
           next: (data) => {
+            console.log('Fetched Subtopic Content:', data);
             this.subtopicContent = data;
             this.loading = false;
           },
@@ -61,4 +62,10 @@ export class SubtopicContent implements OnInit {
   selectSubtopic(id: number): void {
     console.log('Selected Subtopic ID:', id);
   }
+
+  isCompleted = false;
+
+markAsComplete(): void {
+  this.isCompleted = true;
+}
 }
