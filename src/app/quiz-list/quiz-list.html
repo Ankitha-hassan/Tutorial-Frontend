@@ -1,0 +1,130 @@
+<!-- <div class="quiz-list-container">
+  <h2 class="title">📝 Available Quizzes</h2>
+
+  <div *ngIf="isLoading" class="loading">
+    Loading quizzes...
+  </div>
+
+  <div *ngIf="!isLoading && quizzes.length === 0" class="no-data">
+    No quizzes available.
+  </div>
+
+ 
+  <div class="quiz-cards">
+    <div class="quiz-card" *ngFor="let quiz of quizzes">
+      <div class="quiz-info">
+        <h3>{{ quiz.quizTitle }}</h3>
+        <p>📚 Course ID: {{ quiz.courseId }}</p>
+        <p>⏱ 5 min | Pass: 70%</p>
+      </div>
+      <button class="start-btn" (click)="startQuiz(quiz.quizId)"><a routerLink="/quizdetails" routerLinkActive="active">Start Quiz ➡</a></button>
+    </div>
+  </div>
+
+ 
+  <div class="leaderboard-container" *ngIf="leaderboard.length > 0">
+    <h3>🏆 Leaderboard</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Participant</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of leaderboard; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ entry.participantName || ('Participant ' + entry.participantId) }}</td>
+          <td>{{ entry.score }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+
+<div class="quiz-portal">
+  <div class="portal-header">
+    <h1>Quiz Portal</h1>
+    <p>Test your knowledge and climb the leaderboard!</p>
+  </div>
+
+  <div class="content-container">
+    <!-- Available Quizzes Section -->
+    <div class="section">
+      <div class="section-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <h2>Available Quizzes</h2>
+      </div>
+
+      <div *ngIf="isLoading" class="loading">Loading quizzes...</div>
+
+      <div class="quiz-cards" *ngIf="!isLoading">
+        <div class="quiz-card" *ngFor="let quiz of quizzes">
+          <div class="quiz-card-header">
+            <div>
+              <h3>{{ quiz.quizTitle }}</h3>
+              <div class="quiz-meta">
+                <span class="meta-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  5 min
+                </span>
+                <span class="meta-item">Pass: 70%</span>
+              </div>
+            </div>
+            <svg class="trophy-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+          </div>
+          <button class="start-btn" (click)="startQuiz(quiz.quizId)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Start Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Section -->
+    <div class="section leaderboard-section">
+      <div class="section-header">
+        <svg class="trophy-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </svg>
+        <h2>Leaderboard</h2>
+      </div>
+
+      <div class="leaderboard-list">
+        <div class="leaderboard-item" *ngFor="let entry of leaderboard; let i = index">
+          <div class="rank-info">
+            <div class="rank-badge" [class.rank-1]="i === 0" [class.rank-2]="i === 1" [class.rank-3]="i === 2">
+              {{ i + 1 }}
+            </div>
+            <span class="participant-name">{{ entry.participantName || 'Participant ' + entry.participantId }}</span>
+          </div>
+          <div class="score-info">
+            <div class="score">{{ entry.score }}/{{ entry.totalScore || 35 }}</div>
+            <div class="percentage">{{ entry.percentage || ((entry.score / 35) * 100).toFixed(1) }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

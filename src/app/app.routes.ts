@@ -5,6 +5,8 @@ import { Courses } from './courses/courses';
 import { CourseDetails } from './course-details/course-details';
 import { SubtopicContent } from './sub-topic-content/subtopic-content';
 import { About } from './about/about';
+import { QuizDetails } from './quiz-details/quiz-details';
+import { QuizList } from './quiz-list/quiz-list';   
 
 export const routes: Routes = [
     { path : '', component: Layout ,
@@ -15,7 +17,10 @@ export const routes: Routes = [
             {path: 'course-details', component: CourseDetails},
             { path: 'course-details/:id', component: CourseDetails },
             { path: 'subtopics/:subtopicId', component: SubtopicContent },
-            { path: '', redirectTo: '/home', pathMatch: 'full' }
+            { path: 'quiz', component:  QuizList },
+            {path:'quizdetails/:quizId',component:QuizDetails},
+            { path: '', redirectTo: '/home', pathMatch: 'full' },
+            
         ]
 
     } 

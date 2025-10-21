@@ -1,0 +1,177 @@
+<!-- <div *ngIf="questions.length">
+  <div *ngFor="let question of questions" class="question-card">
+    <h4>{{question.questionText}} (Marks: {{question.marks}})</h4>
+    <div *ngFor="let option of question.options">
+      <label>
+        <input type="radio" name="question{{question.questionId}}" />
+        {{option.optionText}}
+      </label>
+    </div>
+  </div>
+</div>
+<div *ngIf="!questions.length">
+  <p>No questions available for this quiz.</p>
+</div> -->
+
+
+<!-- Quiz View -->
+<div class="quiz-container" *ngIf="!showResults && questions.length > 0">
+  <div class="quiz-card">
+    <!-- Header -->
+    <div class="quiz-header">
+      <div>
+        <h2>{{ quizTitle }}</h2>
+        <p class="question-info">
+          Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}
+          ({{ answeredCount }} answered)
+        </p>
+      </div>
+      <div class="timer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>{{ formatTime(timer) }}</span>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progress"></div>
+    </div>
+
+    <!-- Question -->
+    <div class="question-section" *ngIf="currentQuestion">
+      <div class="question-header">
+        <h3>{{ currentQuestion.questionText }}</h3>
+        <span class="points-badge">{{ currentQuestion.marks }} pts</span>
+      </div>
+
+      <!-- Options -->
+      <div class="options-list">
+        <label 
+          *ngFor="let option of currentQuestion.options; let i = index"
+          class="option-label"
+          [class.selected]="isOptionSelected(currentQuestion.questionId, option.optionId)"
+        >
+          <input 
+            type="radio" 
+            [name]="'question-' + currentQuestion.questionId"
+            [checked]="isOptionSelected(currentQuestion.questionId, option.optionId)"
+            (change)="selectOption(currentQuestion.questionId, option.optionId)"
+          />
+          <span class="option-text">
+            <!-- FIXED: Use helper method -->
+            <span class="option-letter">{{ charFromCode(i) }}.</span>
+            {{ option.optionText }}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation-buttons">
+      <button class="btn btn-secondary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Previous
+      </button>
+      <button class="btn btn-primary" (click)="nextQuestion()">
+        {{ currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next' }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Results View -->
+<div class="results-container" *ngIf="showResults">
+  <div class="results-card">
+    <div class="success-header">
+      <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <div class="congrats-header">
+        <svg class="trophy-small" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </svg>
+        <h2>Congratulations!</h2>
+      </div>
+      <p *ngIf="calculateResults().passed">You passed the quiz!</p>
+      <p *ngIf="!calculateResults().passed">You did not pass the quiz.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card stat-blue">
+        <div class="stat-label">Score</div>
+        <div class="stat-value">{{ calculateResults().score }}/{{ calculateResults().total }}</div>
+      </div>
+      <div class="stat-card stat-purple">
+        <div class="stat-label">Percentage</div>
+        <div class="stat-value">{{ calculateResults().percentage }}%</div>
+      </div>
+      <div class="stat-card stat-pink">
+        <div class="stat-label">Time Taken</div>
+        <div class="stat-value">{{ formatTime(timer) }}</div>
+      </div>
+    </div>
+
+    <!-- Question Review -->
+    <div class="review-section">
+      <div class="review-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <h3>Question Review</h3>
+      </div>
+      
+      <div class="review-list">
+        <div *ngFor="let item of getQuestionReview(); let i = index" class="review-item" [class.correct]="item.isCorrect" [class.incorrect]="!item.isCorrect">
+          <div class="review-question">
+            <svg *ngIf="item.isCorrect" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <svg *ngIf="!item.isCorrect" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            <span class="question-text">{{ i + 1 }}. {{ item.question }}</span>
+            <span class="points-badge-small">{{ item.points }} pts</span>
+          </div>
+          <div class="answer-details">
+            <div>
+              <span class="label">Your answer: </span>
+              <span [class.text-correct]="item.isCorrect" [class.text-incorrect]="!item.isCorrect">{{ item.yourAnswer }}</span>
+            </div>
+            <div *ngIf="!item.isCorrect">
+              <span class="label">Correct answer: </span>
+              <span class="text-correct">{{ item.correctAnswer }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <button class="btn btn-primary btn-block" (click)="backToQuizList()">
+      Back to Quiz List
+    </button>
+  </div>
+</div>

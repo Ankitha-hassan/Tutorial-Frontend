@@ -1,0 +1,289 @@
+/* .quiz-list-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.loading, .no-data {
+  text-align: center;
+  font-size: 16px;
+  color: #777;
+}
+
+.quiz-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.quiz-card {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 280px;
+  padding: 1rem;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.1);
+}
+
+.quiz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+}
+
+.quiz-info h3 {
+  margin-bottom: 0.5rem;
+  font-size: 20px;
+}
+
+.start-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.start-btn:hover {
+  background-color: #0056b3;
+}
+
+.leaderboard-container {
+  margin-top: 2rem;
+}
+
+.leaderboard-container h3 {
+  margin-bottom: 0.5rem;
+}
+
+.leaderboard-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.leaderboard-container th,
+.leaderboard-container td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.leaderboard-container th {
+  background-color: #f0f0f0;
+} */
+.quiz-portal {
+  min-height: 100vh;
+  background: #f3f4f6;
+  padding: 2rem;
+}
+
+.portal-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.portal-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.portal-header p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.section-header svg {
+  color: #6b7280;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.quiz-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.quiz-card {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.quiz-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.quiz-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.trophy-icon {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.start-btn {
+  width: 100%;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+.start-btn:hover {
+  background: #4f46e5;
+}
+
+.leaderboard-section {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.leaderboard-item:hover {
+  background: #f9fafb;
+}
+
+.rank-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rank-badge {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.875rem;
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.rank-badge.rank-1 {
+  background: #fbbf24;
+  color: white;
+}
+
+.rank-badge.rank-2 {
+  background: #d1d5db;
+  color: #374151;
+}
+
+.rank-badge.rank-3 {
+  background: #fb923c;
+  color: white;
+}
+
+.participant-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.score-info {
+  text-align: right;
+}
+
+.score {
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.percentage {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
