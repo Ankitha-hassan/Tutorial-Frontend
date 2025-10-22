@@ -5,8 +5,21 @@ import { RouterModule } from '@angular/router';
   selector: 'app-layout',
   imports: [RouterModule ],
   templateUrl: './layout.html',
-  styleUrl: './layout.css'
+  styleUrls: ['./layout.css']
 })
 export class Layout {
+  isDarkMode: boolean = false;
+
+toggleTheme() {
+  this.isDarkMode = !this.isDarkMode;
+
+  const body = document.body;
+  if (this.isDarkMode) {
+    body.classList.add('dark-mode');
+  } else {
+    body.classList.remove('dark-mode');
+  }
+}
+
 
 }

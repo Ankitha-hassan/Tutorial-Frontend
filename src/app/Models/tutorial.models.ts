@@ -4,6 +4,7 @@ export interface Course {
   courseName: string;
   description?: string;
   topics?: Topic[];
+  image?: string;
 }
 export interface Topic {
   open: any;

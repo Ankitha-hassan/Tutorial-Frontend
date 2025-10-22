@@ -1,3 +1,4 @@
+  <div [class.dark-mode]="isDarkMode" class="app-wrapper">
   <header class="navbar">
     <div class="logo">
       <span class="icon"><div class="icon-badge"><i class="pi pi-book"></i></div></span>
@@ -14,7 +15,9 @@
 
       </ul>
     </nav>
-    <button class="mode-toggle"><i class="pi pi-moon"></i></button>
+<button class="mode-toggle" (click)="toggleTheme()">
+  <i [class]="isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"></i>
+</button>
   </header>
 
   <router-outlet></router-outlet>
@@ -59,3 +62,4 @@
             <p>© 2025 Vsc Tutorials. All rights reserved.</p>
         </div>
     </footer>
+    </div>

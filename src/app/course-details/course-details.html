@@ -1,46 +1,126 @@
-<div class="coursedetails-container">
-<div *ngIf="loading">Loading course...</div>
+<!-- course-details.component.html -->
+<div class="course-details-wrapper">
+  <div class="container">
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading course...</p>
+    </div>
 
-<div *ngIf="error">{{ error }}</div>
+    <!-- Error State -->
+    <div *ngIf="error" class="error-banner">
+      <i class="pi pi-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+    </div>
 
-<div *ngIf="!loading && selectedCourse">
-  <div class="breadcrumb">
-    <a routerLink="/home" routerLinkActive="active">Home</a> › 
-    <a routerLink="/Courses" routerLinkActive="active">Courses</a> › 
-    <span>{{ selectedCourse.courseName }}</span>
-  </div>
+    <!-- Course Content -->
+    <div *ngIf="!loading && selectedCourse">
+      
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a routerLink="/home" routerLinkActive="active">Home</a>
+        <span class="separator">›</span>
+        <a routerLink="/Courses" routerLinkActive="active">Courses</a>
+        <span class="separator">›</span>
+        <span class="current">{{ selectedCourse.courseName }}</span>
+      </nav>
 
-  <h1>{{ selectedCourse.courseName }}</h1>
-  <p>{{ selectedCourse.description }}</p>
-  <h3>Course topics</h3>
-  <!-- Show topics -->
-<div class="topics" *ngIf="selectedTopics?.length">
-  <div *ngFor="let topic of selectedTopics; let i = index" class="topic-card">
-    <div class="topic-header" (click)="toggleTopic(i)">
-      <div class="topic-number">{{ i + 1 }}</div>
-      <div class="topic-info">
-        <h2>{{ topic.topicName }}</h2>
-        <p>{{ topic.subtopics?.length || 0 }} lessons</p>
+      <!-- Course Header -->
+      <div class="course-header">
+        <div class="header-content">
+          <div class="header-text">
+            <h1>{{ selectedCourse.courseName }}</h1>
+            <p class="course-description">{{ selectedCourse.description }}</p>
+          </div>
+          <div class="header-icon">
+            <i class="pi pi-graduation-cap"></i>
+          </div>
+        </div>
+        
+        <div class="course-stats">
+          <div class="stat-item">
+            <i class="pi pi-book"></i>
+            <span>{{ selectedTopics.length || 0 }} Topics</span>
+          </div>
+          <div class="stat-item">
+            <i class="pi pi-list"></i>
+            <span>{{ getTotalLessons() }} Lessons</span>
+          </div>
+        </div>
       </div>
-      <div class="topic-arrow" [class.open]="topic.open">›</div>
-    </div>
 
-    <!-- Collapsible content -->
-    <div class="subtopics" *ngIf="topic.open">
-      <ul>
-        <li *ngFor="let sub of topic.subtopics">
-      <a [routerLink]="['/subtopics', sub.subTopicId]" (click)="selectSubtopic(sub.subTopicId)" >
-        <i class="pi pi-book"></i>     {{ sub.subTopicName }}
-      </a> </li>
-      </ul>
+      <!-- Topics Section Header -->
+      <div class="section-header">
+        <div class="section-line"></div>
+        <h3>Course Topics</h3>
+      </div>
+
+      <!-- Topics List -->
+      <div *ngIf="selectedTopics?.length" class="topics-container">
+        <div *ngFor="let topic of selectedTopics; let i = index" class="topic-card">
+          
+          <!-- Topic Header -->
+          <div class="topic-header" (click)="toggleTopic(i)">
+            <div class="topic-left">
+              <div class="topic-number">
+                <span>{{ i + 1 }}</span>
+              </div>
+              <div class="topic-info">
+                <h2>{{ topic.topicName }}</h2>
+                <div class="lesson-count">
+                  <i class="pi pi-book"></i>
+                  <span>{{ topic.subtopics?.length || 0 }} lessons</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-arrow" [class.open]="topic.open">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Subtopics -->
+          <div *ngIf="topic.open" class="subtopics">
+            <ul>
+              <li *ngFor="let sub of topic.subtopics">
+                <a [routerLink]="['/subtopics', sub.subTopicId]" (click)="selectSubtopic(sub.subTopicId)">
+                  <div class="subtopic-icon">
+                    <i class="pi pi-book"></i>
+                  </div>
+                  <span>{{ sub.subTopicName }}</span>
+                  <div class="subtopic-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!selectedTopics?.length && !loading" class="empty-state">
+        <div class="empty-icon">
+          <i class="pi pi-inbox"></i>
+        </div>
+        <h3>No Topics Available</h3>
+        <p>This course doesn't have any topics yet.</p>
+      </div>
+
+      <!-- Back Button -->
+      <div class="back-button-container">
+        <a routerLink="/Courses" class="back-button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          Back to Courses
+        </a>
+      </div>
+
     </div>
   </div>
 </div>
-
-
-  <!-- Back to Courses button -->
-  <div class="back-button">
-    <a routerLink="/Courses" class="btn btn-secondary">← Back to Courses</a>
-  </div>
-</div>
-

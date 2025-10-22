@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../courses/course-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Course, Subtopic, Topic } from '../Models/tutorial.models';
 import { RouterModule } from '@angular/router';
@@ -21,7 +21,8 @@ export class SubtopicContent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +41,7 @@ export class SubtopicContent implements OnInit {
           next: (data) => {
             console.log('Fetched Subtopic Content:', data);
             this.subtopicContent = data;
+            this.setNavigation();
             this.loading = false;
           },
           error: (err) => {
@@ -65,7 +67,49 @@ export class SubtopicContent implements OnInit {
 
   isCompleted = false;
 
-markAsComplete(): void {
+  markAsComplete(): void {
   this.isCompleted = true;
 }
+  currentSubtopicIndex: number = 0;
+  previousSubtopic: Subtopic | null = null;
+  nextSubtopic: Subtopic | null = null;
+
+  private setNavigation() {
+    if (!this.topics?.length || !this.subtopicContent) {
+      this.previousSubtopic = null;
+      this.nextSubtopic = null;
+      return;
+    }
+
+    // Flatten all subtopics safely
+    const allSubtopics = this.topics.flatMap(t => t.subtopics ?? []);
+
+    // Find current subtopic index safely
+    const currentIndex = allSubtopics.findIndex(
+      s => s.subTopicId === this.subtopicContent?.subTopicId
+    );
+
+    if (currentIndex === -1) {
+      this.previousSubtopic = null;
+      this.nextSubtopic = null;
+      return;
+    }
+
+    this.currentSubtopicIndex = currentIndex;
+    this.previousSubtopic = allSubtopics[currentIndex - 1] ?? null;
+    this.nextSubtopic = allSubtopics[currentIndex + 1] ?? null;
+  }
+
+  goToPreviousSubtopic() {
+    if (this.previousSubtopic) {
+      this.router.navigate(['/subtopics', this.previousSubtopic.subTopicId]);
+    }
+  }
+
+  goToNextSubtopic() {
+    if (this.nextSubtopic) {
+      this.router.navigate(['/subtopics', this.nextSubtopic.subTopicId]);
+    }
+  }
+
 }

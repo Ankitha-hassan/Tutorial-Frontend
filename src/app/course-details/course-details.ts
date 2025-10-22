@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Course, Subtopic, Topic } from '../Models/tutorial.models';
 import { CourseService } from '../courses/course-service';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule, CommonModule],
   selector: 'app-course-details',
   templateUrl: './course-details.html',
   styleUrl: './course-details.css'
@@ -58,7 +58,7 @@ export class CourseDetails implements OnInit {
         this.selectedTopics.forEach((topic) => {
           this.courseService.getSubtopicsByTopicId(topic.topicId).subscribe({
             next: (subtopics) => {
-              topic.subtopics = subtopics; // ✅ store directly inside topic
+              topic.subtopics = subtopics; // store directly inside topic
               console.log(`Subtopics for Topic ${topic.topicId}:`, subtopics);
 
               
@@ -88,6 +88,11 @@ selectSubtopic(id: number): void {
   toggleTopic(index: number): void {
   this.selectedTopics[index].open = !this.selectedTopics[index].open;
 }
-
+getTotalLessons(): number {
+    if (!this.selectedTopics?.length) return 0;
+    return this.selectedTopics.reduce((total, topic) => {
+      return total + (topic.subtopics?.length || 0);
+    }, 0);
+  }
   
 }

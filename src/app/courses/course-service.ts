@@ -8,7 +8,7 @@ import {  Course, Subtopic, Topic } from '../Models/tutorial.models';
 })
 export class CourseService {
    private apiUrl = 'http://localhost:9090/api/v1/Courses'; 
-   private apiUrl1 = 'http://localhost:9090/api/v1/Courses/topics';
+   private apiUrl1 = 'http://localhost:9090/api/v1/Courses';
    private apiUrl2 = 'http://localhost:9090/api/v1/Courses/topics';
    private apiUrl3 = 'http://localhost:9090/api/v1/Courses/subtopics';
 
@@ -30,7 +30,7 @@ export class CourseService {
   }
 
   getTopicsByCourseId(courseId: number): Observable<Topic[]> {
-    return this.http.get<Topic[]>(`${this.apiUrl1}/${courseId}`);
+    return this.http.get<Topic[]>(`${this.apiUrl1}/${courseId}/topics`);
   }
 
   getSubtopicsByTopicId(topicId: number): Observable<Subtopic[]> {

@@ -1,78 +1,88 @@
-<!-- HTML Template -->
-<div *ngIf="loading" class="loading-state">Loading subtopic content...</div>
+  <!-- HTML Template -->
+  <div *ngIf="loading" class="loading-state">Loading subtopic content...</div>
 
-<div *ngIf="error" class="error-state">{{ error }}</div>
+  <div *ngIf="error" class="error-state">{{ error }}</div>
 
-<div *ngIf="!loading && subtopicContent" class="course-layout">
-  <!-- Main Content Area -->
-  <div class="main-content">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <a routerLink="/Courses" routerLinkActive="active">Courses</a>
-      <span class="separator">›</span>
-      <span>{{ subtopicContent.subTopicName }}</span>
-    </div>
-
-    <!-- Page Title -->
-    <!-- <h1 class="page-title">{{ subtopicContent[0].title }}</h1> -->
-
-    <!-- Content Sections -->
-    <div *ngIf="subtopicContent.content && subtopicContent.content.trim().length > 0; else noContent">
-      <div [innerHTML]="subtopicContent.content" class="section-body"></div>
-    </div>
-
-    <!-- “No content” message -->
-    <ng-template #noContent>
-      <div class="no-content">
-        No content found for this subtopic.
+  <div *ngIf="!loading && subtopicContent" class="course-layout">
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a routerLink="/Courses" routerLinkActive="active">Courses</a>
+        <span class="separator">›</span>
+        <span>{{ subtopicContent.subTopicName }}</span>
       </div>
-    </ng-template>
 
-    <!-- Back Button -->
-    <a routerLink="/Courses" routerLinkActive="active" class="back-button">
-      ← Back to Courses
-    </a>
+      <!-- Page Title -->
+      <!-- <h1 class="page-title">{{ subtopicContent[0].title }}</h1> -->
+
+      <!-- Content Sections -->
+      <div *ngIf="subtopicContent.content && subtopicContent.content.trim().length > 0; else noContent">
+        <div [innerHTML]="subtopicContent.content" class="section-body"></div>
+      </div>
+
+      <!-- “No content” message -->
+      <ng-template #noContent>
+        <div class="no-content">
+          No content found for this subtopic.
+        </div>
+      </ng-template>
+
+        <!-- Navigation Buttons -->
+      <div class="subtopic-navigation" *ngIf="topics?.length && subtopicContent">
+        <button 
+          class="nav-button" 
+          [disabled]="!previousSubtopic" 
+          (click)="goToPreviousSubtopic()">
+          ← Previous
+        </button>
+
+        <button 
+          class="nav-button" 
+          [disabled]="!nextSubtopic" 
+          (click)="goToNextSubtopic()">
+          Next →
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Sidebar -->
+    <aside class="sidebar" *ngIf="hasSidebar">
+    <div class="sidebar-header">Course Topics</div>
+
+    <nav class="sidebar-nav">
+      <div class="topics" *ngIf="topics?.length">
+        <div *ngFor="let topic of topics" class="topic-block">
+          <h4 class="topic-title">{{ topic.topicName }}</h4>
+          <ul class="subtopic-list">
+            <li *ngFor="let sub of topic.subtopics">
+              <a
+                [routerLink]="['/subtopics', sub.subTopicId]"
+                routerLinkActive="active-link"
+                class="subtopic-link"
+              >
+                {{ sub.subTopicName }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </aside>
+  </div>
+  <div class="completion-container">
+    <button
+      class="mark-complete"
+      [ngClass]="{ completed: isCompleted }"
+      (click)="markAsComplete()"
+    >
+      <span class="icon" *ngIf="!isCompleted">✓</span>
+      <span class="icon" *ngIf="isCompleted">✔️</span>
+      {{ isCompleted ? 'Completed' : 'Mark as Complete' }}
+    </button>
   </div>
 
-  <!-- Sidebar (Optional - for topics like HTML tutorial) -->
-  <aside class="sidebar" *ngIf="hasSidebar">
-  <div class="sidebar-header">Course Topics</div>
-
-  <nav class="sidebar-nav">
-    <div class="topics" *ngIf="topics?.length">
-      <div *ngFor="let topic of topics" class="topic-block">
-        <h4 class="topic-title">{{ topic.topicName }}</h4>
-        <ul class="subtopic-list">
-          <li *ngFor="let sub of topic.subtopics">
-            <a
-              [routerLink]="['/subtopics', sub.subTopicId]"
-              routerLinkActive="active-link"
-              class="subtopic-link"
-            >
-              {{ sub.subTopicName }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</aside>
-</div>
-<div class="completion-container">
-  <button
-    class="mark-complete"
-    [ngClass]="{ completed: isCompleted }"
-    (click)="markAsComplete()"
-  >
-    <span class="icon" *ngIf="!isCompleted">✓</span>
-    <span class="icon" *ngIf="isCompleted">✔️</span>
-    {{ isCompleted ? 'Completed' : 'Mark as Complete' }}
-  </button>
-</div>
-
-<div *ngIf="!loading && !subtopicContent" class="no-content">
-  Subtopic not found.
-</div>
-<!-- <div *ngIf="!loading && subtopicContent" class="no-content">
-  No content found for this subtopic.
-</div> -->
+  <div *ngIf="!loading && !subtopicContent" class="no-content">
+    Subtopic not found.
+  </div>

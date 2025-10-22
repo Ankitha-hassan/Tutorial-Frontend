@@ -1,18 +1,24 @@
+<!-- Main Content -->
+<main>
+  <div class="page-header">
+    <h1>All Courses</h1>
+    <p>Explore our comprehensive collection of tutorials and start learning today</p>
+  </div>
 
-    <!-- Main Content -->
-    <main>
-        <div class="page-header">
-            <h1>All Courses</h1>
-            <p>Explore our comprehensive collection of tutorials and start learning today</p>
-        </div>
-
-        <!-- Search and Filters -->
-        <div class="search-filter-section">
-            <div class="search-box">
-                <span class="search-icon"><i class="pi pi-search"></i></span>
-                <input type="text" placeholder="Search courses..." id="searchInput">
-            </div>
-            <div class="filters">
+  <!-- Search and Filters -->
+  <div class="search-filter-section">
+    <div class="search-box">
+      <span class="search-icon"><i class="pi pi-search"></i></span>
+      <input
+        type="text"
+        placeholder="Search courses..."
+        id="searchInput"
+        [(ngModel)]="searchTerm"
+        (input)="filterCourses()"
+      />
+    </div>
+  </div>
+  <!-- <div class="filters">
                 <div class="filter-dropdown">
                     <select id="categoryFilter">
                         <option value="">All Categories</option>
@@ -30,34 +36,49 @@
                         <option value="advanced">Advanced</option>
                     </select>
                 </div>
-            </div>
-        </div>
+            </div> -->
+  <!-- </div> -->
 
-        <!-- <div class="results-count">Showing 8 courses</div> -->
+  <!-- <div class="results-count">Showing 8 courses</div> -->
 
-<!-- Courses Grid -->
-<div class="courses-grid">
-  <div *ngFor="let course of courses" class="course-card" >
-    <img src="https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?w=400&h=200&fit=crop" [alt]="course.courseName" class="course-image">
-    <div class="course-content">
-      <div class="course-header">
-        <h3 class="course-title">{{ course.courseName }}</h3>
-        <!-- <span class="course-level" [ngClass]="{
+  <!-- Courses Grid -->
+  <div class="courses-grid">
+    <div *ngFor="let course of filteredCourses" class="course-card">
+      <img
+        *ngIf="course.image; else defaultImage"
+        [src]="'data:image/jpeg;base64,' + course.image"
+        [alt]="course.courseName"
+        class="course-image"
+      />
+
+      <ng-template #defaultImage>
+        <img
+          src="https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?w=400&h=200&fit=crop"
+          [alt]="course.courseName"
+          class="course-image"
+        />
+      </ng-template>
+      <div class="course-content">
+        <div class="course-header">
+          <h3 class="course-title">{{ course.courseName }}</h3>
+          <!-- <span class="course-level" [ngClass]="{
           'level-beginner': course.level.toLowerCase() === 'beginner',
           'level-intermediate': course.level.toLowerCase() === 'intermediate',
           'level-advanced': course.level.toLowerCase() === 'advanced'
         }">{{ course.level }}</span> -->
+        </div>
+        <p class="course-description">{{ course.description }}</p>
+        <!-- <p class="course-category">{{ course.category }}</p> -->
+        <!-- <button class="course-btn">Explore Course →</button> -->
+        <div class="courses-btn">
+          <a
+            [routerLink]="['/course-details', course.courseId]"
+            routerLinkActive="active"
+            class="course-btn"
+            >Explore Course →</a
+          >
+        </div>
       </div>
-      <p class="course-description">{{ course.description }}</p>
-      <!-- <p class="course-category">{{ course.category }}</p> -->
-      <!-- <button class="course-btn">Explore Course →</button> -->
-       <div class="courses-btn">
-    <a [routerLink]="['/course-details', course.courseId]" routerLinkActive="active" class="course-btn">Explore Course →</a>
-</div>
     </div>
   </div>
-</div>
-
-    </main>
-
-   
+</main>
