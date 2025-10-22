@@ -19,6 +19,7 @@ export const routes: Routes = [
             { path: 'subtopics/:subtopicId', component: SubtopicContent },
             { path: 'quiz', component:  QuizList },
             {path:'quizdetails/:quizId',component:QuizDetails},
+            {path: 'quiz-list', component: QuizList},
             { path: '', redirectTo: '/home', pathMatch: 'full' },
             
         ]
