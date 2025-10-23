@@ -7,36 +7,34 @@ import {  Course, Subtopic, Topic } from '../Models/tutorial.models';
   providedIn: 'root'
 })
 export class CourseService {
-   private apiUrl = 'http://localhost:9090/api/v1/Courses'; 
-   private apiUrl1 = 'http://localhost:9090/api/v1/Courses';
-   private apiUrl2 = 'http://localhost:9090/api/v1/Courses/topics';
-   private apiUrl3 = 'http://localhost:9090/api/v1/Courses/subtopics';
-
-  constructor(private http: HttpClient) { }
-
-   private topicsSource = new BehaviorSubject<Topic[]>([]);
+ 
+  private topicsSource = new BehaviorSubject<Topic[]>([]);
   topics$ = this.topicsSource.asObservable();
 
   setTopics(topics: Topic[]) {
     this.topicsSource.next(topics);
   }
 
-  getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(this.apiUrl);
-  }
+  private gatewayUrl = 'http://localhost:8082/api'; // Gateway base URL
+  constructor(private http: HttpClient) { }
+getCourses(): Observable<Course[]> {
+  return this.http.get<Course[]>(`${this.gatewayUrl}/Course`);
+}
 
-  getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/${id}`);
-  }
+getCourseById(id: number): Observable<Course> {
+  return this.http.get<Course>(`${this.gatewayUrl}/Course/${id}`);
+}
 
-  getTopicsByCourseId(courseId: number): Observable<Topic[]> {
-    return this.http.get<Topic[]>(`${this.apiUrl1}/${courseId}/topics`);
-  }
+getTopicsByCourseId(courseId: number): Observable<Topic[]> {
+  return this.http.get<Topic[]>(`${this.gatewayUrl}/Topics?courseId=${courseId}`);
+}
 
-  getSubtopicsByTopicId(topicId: number): Observable<Subtopic[]> {
-    return this.http.get<Subtopic[]>(`${this.apiUrl2}/${topicId}/subtopics`);
-  }
-  getContentBySubtopicId(subtopicId: number): Observable<Subtopic> {
-    return this.http.get<Subtopic>(`${this.apiUrl3}/${subtopicId}`);
-  }
+getSubtopicsByTopicId(topicId: number): Observable<Subtopic[]> {
+  return this.http.get<Subtopic[]>(`${this.gatewayUrl}/SubTopics?topicId=${topicId}`);
+}
+
+getContentBySubtopicId(subtopicId: number): Observable<Subtopic> {
+  return this.http.get<Subtopic>(`${this.gatewayUrl}/SubTopics/${subtopicId}`);
+}
+
 }
