@@ -1,0 +1,131 @@
+<div class="ide-container">
+  <!-- Header Section -->
+  <div class="ide-header">
+    <h3>Interactive Code Editor</h3>
+    
+  </div>
+
+  <!-- Toolbar Section -->
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <label for="language">Language:</label>
+      <select 
+        id="language" 
+        [(ngModel)]="language" 
+        (change)="onLanguageChange($event)"
+        [disabled]="isRunning"
+        aria-label="Select programming language"
+      >
+        <option *ngFor="let lang of languages" [value]="lang.id">
+          {{ lang.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="toolbar-actions">
+      <button 
+        class="input-toggle-btn" 
+        (click)="toggleInputSection()"
+        [class.active]="showInputSection"
+        [disabled]="isRunning"
+        title="Toggle input section"
+        aria-label="Toggle input"
+      >
+        <span *ngIf="!showInputSection">🔼 Show Input</span>
+        <span *ngIf="showInputSection">🔽 Hide Input</span>
+      </button>
+
+      <button 
+        class="clear-btn" 
+        (click)="clearCode()"
+        [disabled]="isRunning"
+        title="Reset to template code"
+        aria-label="Reset code"
+      >
+        🔄 Reset
+      </button>
+      
+      <button 
+        class="copy-btn" 
+        (click)="copyCode()"
+        [class.copied]="copySuccess"
+        [disabled]="isRunning"
+        title="Copy code to clipboard"
+        aria-label="Copy code"
+      >
+        <span *ngIf="!copySuccess">📋 Copy</span>
+        <span *ngIf="copySuccess">✓ Copied!</span>
+      </button>
+      
+      <button 
+        class="run-btn"
+        (click)="runCode()" 
+        [disabled]="isRunning"
+        title="Run code (Ctrl+Enter)"
+        aria-label="Run code"
+      >
+        <span *ngIf="!isRunning">▶ Run Code</span>
+        <span *ngIf="isRunning">⏳ Running...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Input Section (Collapsible) -->
+  <div class="input-section" *ngIf="showInputSection">
+    <div class="input-header">
+      <label for="stdin">
+        📥 Program Input
+      </label>
+      <span class="input-hint">
+        💡 Enter each input on a new line
+      </span>
+    </div>
+    <textarea
+      id="stdin"
+      name="stdin"
+      [(ngModel)]="stdin"
+      placeholder="Enter input values here (one per line)&#10;&#10;Example:&#10;10&#10;20&#10;Hello"
+      rows="5"
+      class="input-textarea"
+      [disabled]="isRunning"
+      aria-label="Program input"
+    ></textarea>
+    <div class="input-footer" *ngIf="stdin && stdin.trim()">
+      <small>{{ inputCount }} input(s) provided</small>
+    </div>
+  </div>
+
+  <!-- Code Editor Section -->
+  <div class="editor-wrapper">
+    <div class="editor-header">
+      <span class="editor-label">{{ currentLanguageName }}</span>
+      <span class="editor-info" *ngIf="code && code.length > 0">
+        {{ lineCount }} lines • {{ code.length }} chars
+      </span>
+    </div>
+    
+    <ngx-codemirror
+      class="code-editor"
+      [(ngModel)]="code"
+      [options]="editorOptions"
+      [disabled]="isRunning"
+      (codeMirrorInit)="onEditorInit($event)"
+    ></ngx-codemirror>
+  </div>
+
+  <!-- Output Section -->
+  <div class="output-container">
+    <div class="output-header">
+      <h4>📤 Output</h4>
+      <span class="output-status" *ngIf="isRunning">
+        <span class="loading-spinner"></span>
+        Processing...
+      </span>
+    </div>
+    <pre 
+      class="output-content" 
+      [class.empty]="!output"
+      [attr.aria-live]="isRunning ? 'polite' : 'off'"
+    >{{ output || 'Run your code to see output here...' }}</pre>
+  </div>
+</div>
