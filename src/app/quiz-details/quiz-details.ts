@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuizDetailsService } from './quiz-details-service';
 import { CommonModule } from '@angular/common';
-import { Question } from '../Models/quiz-models';
+import { QuizDetailsService } from './quiz-details-service';
+import { Question, Quiz } from '../Models/quiz-models';
+import { AuthenticationService } from '../login/authentication-service';
 
 interface QuizAnswer {
   questionId: number;
@@ -11,65 +12,65 @@ interface QuizAnswer {
 
 @Component({
   selector: 'app-quiz-details',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './quiz-details.html',
-  styleUrls: ['./quiz-details.css'],
-  imports: [CommonModule]
+  styleUrls: ['./quiz-details.css']
 })
 export class QuizDetails implements OnInit, OnDestroy {
   quizId!: number;
   questions: Question[] = [];
-  currentQuestionIndex: number = 0;
+  currentQuestionIndex = 0;
   answers: QuizAnswer[] = [];
-  timer: number = 0;
+  quiz!: Quiz;
+  timer = 0;
   timerInterval: any;
-  showResults: boolean = false;
-  quizTitle: string = 'JavaScript Basics Quiz';
+  showResults = false;
+  quizTitle = 'Quiz';
+  results: any = null; // stores results from service
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private quizService: QuizDetailsService
+    private quizService: QuizDetailsService,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('quizId');
       this.quizId = id ? Number(id) : 0;
-
       if (this.quizId > 0) {
         this.loadQuizQuestions();
         this.startTimer();
       } else {
-        console.error('Invalid or missing quizId');
+        console.error('Invalid quizId');
       }
     });
   }
 
   ngOnDestroy(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
+    if (this.timerInterval) clearInterval(this.timerInterval);
   }
 
   loadQuizQuestions(): void {
     this.quizService.getQuizDetails(this.quizId).subscribe({
       next: (data) => {
         this.questions = data;
+        this.quizTitle = `Quiz #${this.quizId}`;
       },
-      error: (error) => console.error('Error loading questions:', error)
+      error: (err) => console.error('Error loading quiz:', err)
     });
   }
 
   startTimer(): void {
-    this.timerInterval = setInterval(() => {
-      this.timer++;
-    }, 1000);
+    this.timerInterval = setInterval(() => this.timer++, 1000);
   }
 
-  formatTime(seconds: number): string {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  formatTime(sec: number): string {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
   }
 
   get currentQuestion(): Question | undefined {
@@ -85,61 +86,44 @@ export class QuizDetails implements OnInit, OnDestroy {
   }
 
   selectOption(questionId: number, optionId: number): void {
-    const existingIndex = this.answers.findIndex(a => a.questionId === questionId);
-    
-    if (existingIndex >= 0) {
-      this.answers[existingIndex].selectedOptionId = optionId;
-    } else {
-      this.answers.push({ questionId, selectedOptionId: optionId });
-    }
+    const existing = this.answers.find(a => a.questionId === questionId);
+    if (existing) existing.selectedOptionId = optionId;
+    else this.answers.push({ questionId, selectedOptionId: optionId });
   }
 
-  isOptionSelected(questionId: number, optionId: number): boolean {
-    const answer = this.answers.find(a => a.questionId === questionId);
-    return answer?.selectedOptionId === optionId;
+  isOptionSelected(qId: number, oId: number): boolean {
+    return this.answers.find(a => a.questionId === qId)?.selectedOptionId === oId;
   }
 
   previousQuestion(): void {
-    if (this.currentQuestionIndex > 0) {
-      this.currentQuestionIndex--;
-    }
+    if (this.currentQuestionIndex > 0) this.currentQuestionIndex--;
   }
 
   nextQuestion(): void {
-    if (this.currentQuestionIndex < this.questions.length - 1) {
-      this.currentQuestionIndex++;
-    } else {
-      this.submitQuiz();
-    }
+    if (this.currentQuestionIndex < this.questions.length - 1) this.currentQuestionIndex++;
   }
 
   submitQuiz(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
+    clearInterval(this.timerInterval);
+    this.results = this.quizService.calculateResults(this.questions, this.answers);
     this.showResults = true;
-  }
 
-  calculateResults() {
-    let correctCount = 0;
-    let totalPoints = 0;
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      alert('Please log in to submit your quiz.');
+      return;
+    }
 
-    this.questions.forEach(q => {
-      totalPoints += q.marks;
-      const userAnswer = this.answers.find(a => a.questionId === q.questionId);
-      const correctOption = q.options.find(o => o.isCorrect);
-      
-      if (userAnswer && correctOption && userAnswer.selectedOptionId === correctOption.optionId) {
-        correctCount += q.marks;
-      }
-    });
-
-    return {
-      score: correctCount,
-      total: totalPoints,
-      percentage: ((correctCount / totalPoints) * 100).toFixed(2),
-      passed: (correctCount / totalPoints) * 100 >= 70
+    const payload = {
+      userId,
+      quizId: this.quizId,
+      score: this.results.score
     };
+
+    this.quizService.submitQuiz(payload).subscribe({
+      next: () => alert(`Quiz submitted! \nScore: ${this.results.score}/${this.results.total}`),
+      error: (err) => console.error('Submit error:', err)
+    });
   }
 
   getQuestionReview() {
@@ -161,7 +145,8 @@ export class QuizDetails implements OnInit, OnDestroy {
   backToQuizList(): void {
     this.router.navigate(['/quiz-list']);
   }
+
   charFromCode(i: number): string {
-  return String.fromCharCode(65 + i); // 65 = 'A'
-}
+    return String.fromCharCode(65 + i);
+  }
 }

@@ -10,9 +10,9 @@
         <li><a routerLink= "Courses" routerLinkActive="active"><span>Courses</span></a></li>
 
         <li><a routerLink="about" routerLinkActive="active">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <!-- <li><a href="#">Contact</a></li> -->
         <a routerLink="/quiz" routerLinkActive="active">Quiz</a>
-
+        <li><a routerLink="login" routerLinkActive="active">Login</a></li>
       </ul>
     </nav>
 <button class="mode-toggle" (click)="toggleTheme()">
@@ -34,7 +34,7 @@
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="#home">Home</a></li>
-                    <li><a href="courses.html">Courses</a></li>
+                    <li><a routerLink="Courses" routerLinkActive="active">Courses</a></li>
                     <li><a routerLink="about" routerLinkActive="active">About</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>

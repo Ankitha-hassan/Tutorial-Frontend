@@ -7,6 +7,8 @@ import { SubtopicContent } from './sub-topic-content/subtopic-content';
 import { About } from './about/about';
 import { QuizDetails } from './quiz-details/quiz-details';
 import { QuizList } from './quiz-list/quiz-list';   
+import { Login } from './login/login';
+import { Register } from './register/register';
 
 export const routes: Routes = [
     { path : '', component: Layout ,
@@ -20,6 +22,8 @@ export const routes: Routes = [
             { path: 'quiz', component:  QuizList },
             {path:'quizdetails/:quizId',component:QuizDetails},
             {path: 'quiz-list', component: QuizList},
+            {path : 'login', component: Login},
+            {path: 'register', component: Register},
             { path: '', redirectTo: '/home', pathMatch: 'full' },
             
         ]

@@ -61,7 +61,7 @@
         </svg>
         Previous
       </button>
-      <button class="btn btn-primary" (click)="nextQuestion()">
+      <button class="btn btn-primary" (click)="currentQuestionIndex === questions.length - 1 ? submitQuiz() : nextQuestion()">
         {{ currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next' }}
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="9 18 15 12 9 6"></polyline>
@@ -76,7 +76,7 @@
   <div class="results-card">
     <div class="success-header">
   <!-- Success Icon -->
-  <div class="success-icon" *ngIf="calculateResults().passed; else failIcon">
+  <div class="success-icon" *ngIf="results?.passed; else failIcon">
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
       <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -106,14 +106,14 @@
     </svg>
 
     <!-- Dynamic Heading -->
-    <h2 *ngIf="calculateResults().passed; else failHeading">Congratulations!</h2>
+    <h2 *ngIf="results?.passed; else failHeading">Congratulations!</h2>
     <ng-template #failHeading>
       <h2>Oops!</h2>
     </ng-template>
   </div>
 
   <!-- Dynamic Message -->
-  <p *ngIf="calculateResults().passed; else failText">
+  <p *ngIf="results?.passed; else failText">
     You passed the quiz!
   </p>
   <ng-template #failText>
@@ -126,11 +126,11 @@
     <div class="stats-grid">
       <div class="stat-card stat-blue">
         <div class="stat-label">Score</div>
-        <div class="stat-value">{{ calculateResults().score }}/{{ calculateResults().total }}</div>
+        <div class="stat-value">{{ results?.score }}/{{ results?.total }}</div>
       </div>
       <div class="stat-card stat-purple">
         <div class="stat-label">Percentage</div>
-        <div class="stat-value">{{ calculateResults().percentage }}%</div>
+        <div class="stat-value">{{ results?.percentage }}%</div>
       </div>
       <div class="stat-card stat-pink">
         <div class="stat-label">Time Taken</div>
